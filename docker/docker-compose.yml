@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  php_httpd:
+    build: .
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./../:/var/www/project:z
+      - ./apache.conf:/etc/apache2/sites-available/000-default.conf
+    container_name: php_httpd

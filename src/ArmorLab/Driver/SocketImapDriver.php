@@ -21,7 +21,9 @@ class SocketImapDriver
 
     public function login(string $login, string $pwd): void
     {
-        $this->connection->command("LOGIN $login $pwd");
+        $this->connection->command(
+            \sprintf('LOGIN %s %s', $login, $pwd)
+        );
     }
 
     public function getActiveFolders(): array
