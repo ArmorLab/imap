@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ArmorLab\Exception;
 
-use Exception;
+use RuntimeException;
 
-class CommandException extends Exception
+class CommandException extends RuntimeException
 {
 }

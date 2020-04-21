@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArmorLab\Driver;
 
 use ArmorLab\Message\MessageHeader;
+use ArmorLab\Parser\HeaderResponseParser;
 use ArmorLab\Parser\ListResponseParser;
 
 class SocketImapDriver
@@ -70,38 +71,7 @@ class SocketImapDriver
     private function getHeadersFromUid(string $uid): MessageHeader
     {
         $response = $this->connection->command("FETCH $uid BODY.PEEK[HEADER]");
-        $header = new MessageHeader($uid);
         
-        foreach ($response as $item) {
-            if (\strpos($item, 'Delivery-date: ') !== false) {
-                $header->deliveryDate = \str_replace('Delivery-date: ', '', $item);
-            }
-
-            if (\strpos($item, 'Date: ') !== false) {
-                $header->date = \str_replace('Date: ', '', $item);
-            }
-
-            if (\strpos($item, 'Envelope-to: ') !== false) {
-                $header->envelopeTo = \str_replace('Envelope-to: ', '', $item);
-            }
-
-            if (\strpos($item, 'From: ') !== false) {
-                $header->from = \str_replace('From: ', '', $item);
-            }
-
-            if (\strpos($item, 'To: ') !== false) {
-                $header->to = \str_replace('To: ', '', $item);
-            }
-
-            if (\strpos($item, 'Cc: ') !== false) {
-                $header->cc = \str_replace('Cc: ', '', $item);
-            }
-
-            if (\strpos($item, 'Importance: ') !== false) {
-                $header->importance = \str_replace('Importance: ', '', $item);
-            }
-        }
-
-        return $header;
+        return HeaderResponseParser::parseResponse($uid, $response);
     }
 }
