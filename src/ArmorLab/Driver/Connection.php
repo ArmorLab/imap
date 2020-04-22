@@ -17,7 +17,7 @@ class Connection
         int $port,
         int $timeout = 15
     ){
-        if (!($this->filePointer = fsockopen($host, $port, $errno, $errstr, $timeout))) {
+        if (!($this->filePointer = fsockopen('ssl://'.$host, $port, $errno, $errstr, $timeout))) {
             throw new ConnectionException("Could not connect to host ($errno) $errstr");
         }
 
