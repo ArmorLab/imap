@@ -13,7 +13,7 @@ class ListResponseParser
         $folders = [];
 
         foreach ($responseRows as $item) {
-            $rows = preg_split( '/ ("\/"|".") /', $item );
+            $rows = (array) preg_split( '/ ("\/"|".") /', $item );
             
             if (\count($rows) < 2) {
                 throw new CommandException('Unhandled response!');
