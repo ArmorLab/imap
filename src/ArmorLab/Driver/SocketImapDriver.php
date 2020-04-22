@@ -27,6 +27,9 @@ class SocketImapDriver
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function getActiveFolders(): array
     {
         $response = $this->connection->command('LSUB "" "*"');
@@ -34,6 +37,9 @@ class SocketImapDriver
         return ListResponseParser::parseResponse($response);
     }
 
+    /**
+     * @return string[]
+     */
     public function getAllFolders(): array
     {
         $response = $this->connection->command('LIST "" "*"');
@@ -46,6 +52,9 @@ class SocketImapDriver
         $this->connection->command("SELECT $folder");
     }
 
+    /**
+     * @return MessageHeader[]
+     */
     public function search(string $criteria): array
     {
         $ids = $this->getUidsBySearchCriteria($criteria);
@@ -57,6 +66,9 @@ class SocketImapDriver
         return $messages;
     }
 
+    /**
+     * @return string[]
+     */
     private function getUidsBySearchCriteria(string $criteria): array
     {
         $response = $this->connection->command("SEARCH $criteria");
