@@ -9,6 +9,9 @@ use ArmorLab\Exception\ConnectionException;
 
 class Connection
 {
+    /**
+     * @var resource
+     */
     private $filePointer;
     private string $commandCounter = '00000001';
 
@@ -29,7 +32,10 @@ class Connection
         }
     }
 
-    public function command($command): array
+    /**
+     * @return string[]
+     */
+    public function command(string $command): array
     {
         $lastResponse = [];
         $lastEndline  = '';
