@@ -12,7 +12,7 @@ class HeaderResponseParser
     {
         $header = new MessageHeader($uid);
         
-        foreach ($$responseRows as $item) {
+        foreach ($responseRows as $item) {
             if (\strpos($item, 'Delivery-date: ') !== false) {
                 $header->deliveryDate = \str_replace('Delivery-date: ', '', $item);
             }
