@@ -1,1 +1,4 @@
 vsc-workspace.code-workspace
+vendor
+config/config.php
+composer.lock
