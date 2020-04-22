@@ -23,7 +23,7 @@ class SocketImapDriver
     public function login(string $login, string $pwd): void
     {
         $this->connection->command(
-            \sprintf('LOGIN %s %s', $login, $pwd)
+            \sprintf('LOGIN %s "%s"', $login, $pwd)
         );
     }
 

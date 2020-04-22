@@ -17,9 +17,12 @@ class Connection
         int $port,
         int $timeout = 15
     ){
-        if (!($this->filePointer = fsockopen('ssl://'.$host, $port, $errno, $errstr, $timeout))) {
+        $filePointer = fsockopen('ssl://'.$host, $port, $errno, $errstr, $timeout);
+        if ($filePointer === false) {
             throw new ConnectionException("Could not connect to host ($errno) $errstr");
         }
+
+        $this->filePointer = $filePointer;
 
         if (!stream_set_timeout($this->filePointer, $timeout)) {
             throw new ConnectionException('Could not set timeout');
@@ -30,10 +33,11 @@ class Connection
     {
         $lastResponse = [];
         $lastEndline  = '';
+        $fullCommand = \sprintf("%s %s \r\n", $this->commandCounter, $command);
         
-        fwrite($this->filePointer, "$this->commandCounter $command\r\n");
+        fwrite($this->filePointer, $fullCommand);
         
-        while ($line = fgets($this->filePointer)) {  
+        while ($line = fgets($this->filePointer)) {
             $line = trim($line);
 
             if(\strpos($line, $this->commandCounter) !== false) {
