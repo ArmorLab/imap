@@ -8,6 +8,11 @@ use ArmorLab\Exception\CommandException;
 
 class ListResponseParser
 {
+    /**
+     * @param string[] $responseRows
+     * 
+     * @return string[]
+     */
     public static function parseResponse(array $responseRows): array
     {
         $folders = [];
@@ -19,7 +24,7 @@ class ListResponseParser
                 throw new CommandException('Unhandled response!');
             }
 
-            $folders[] = \trim($rows[1], '"');
+            $folders[] = \trim((string) $rows[1], '"');
         }
 
         return $folders;
