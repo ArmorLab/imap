@@ -8,40 +8,52 @@ use ArmorLab\Message\MessageHeader;
 
 class HeaderResponseParser
 {
+    /**
+     * @param string[] $responseRows
+     */
     public static function parseResponse(string $uid, array $responseRows): MessageHeader
     {
-        $header = new MessageHeader($uid);
-        
+        $date = $deliveryDate = $envelopeTo = $from = $to = $cc = $importance = '';
+
         foreach ($responseRows as $item) {
             if (\strpos($item, 'Delivery-date: ') !== false) {
-                $header->deliveryDate = \str_replace('Delivery-date: ', '', $item);
+                $deliveryDate = \str_replace('Delivery-date: ', '', $item);
             }
 
             if (\strpos($item, 'Date: ') !== false) {
-                $header->date = \str_replace('Date: ', '', $item);
+                $date = \str_replace('Date: ', '', $item);
             }
 
             if (\strpos($item, 'Envelope-to: ') !== false) {
-                $header->envelopeTo = \str_replace('Envelope-to: ', '', $item);
+                $envelopeTo = \str_replace('Envelope-to: ', '', $item);
             }
 
             if (\strpos($item, 'From: ') !== false) {
-                $header->from = \str_replace('From: ', '', $item);
+                $from = \str_replace('From: ', '', $item);
             }
 
             if (\strpos($item, 'To: ') !== false) {
-                $header->to = \str_replace('To: ', '', $item);
+                $to = \str_replace('To: ', '', $item);
             }
 
             if (\strpos($item, 'Cc: ') !== false) {
-                $header->cc = \str_replace('Cc: ', '', $item);
+                $cc = \str_replace('Cc: ', '', $item);
             }
 
             if (\strpos($item, 'Importance: ') !== false) {
-                $header->importance = \str_replace('Importance: ', '', $item);
+                $importance = \str_replace('Importance: ', '', $item);
             }
         }
 
-        return $header;
+        return new MessageHeader(
+            $uid,
+            $date,
+            $deliveryDate,
+            $envelopeTo,
+            $from,
+            $to,
+            $cc,
+            $importance
+        );
     }
 }

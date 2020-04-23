@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace ArmorLab\Message;
 
-use InvalidArgumentException;
-
 class MessageHeader
 {
     private string $uid;
@@ -17,18 +15,24 @@ class MessageHeader
     private string $cc = '';
     private string $importance = '';
 
-    public function __construct(string $uid)
-    {
+    public function __construct(
+        string $uid,
+        string $date,
+        string $deliveryDate,
+        string $envelopeTo,
+        string $from,
+        string $to,
+        string $cc,
+        string $importance
+    ) {
         $this->uid = $uid;
-    }
-
-    public function __set($name, $value)
-    {
-        if ($name === 'uid') {
-            throw new InvalidArgumentException('Uid cannot be set on created Message Header!');
-        }
-
-        $this->$name = \iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+        $this->date = $this->decodeString($date);
+        $this->deliveryDate = $this->decodeString($deliveryDate);
+        $this->envelopeTo = $this->decodeString($envelopeTo);
+        $this->from = $this->decodeString($from);
+        $this->to = $this->decodeString($to);
+        $this->cc = $this->decodeString($cc);
+        $this->importance = $this->decodeString($importance);
     }
 
     public function getUid(): string
@@ -69,5 +73,10 @@ class MessageHeader
     public function getImportance(): string
     {
         return $this->importance;
+    }
+
+    private function decodeString(string $stringToDecode): string
+    {
+        return (string) \iconv_mime_decode($stringToDecode, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
     }
 }
