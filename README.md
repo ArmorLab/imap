@@ -17,6 +17,7 @@ Library for manage mailboxes and emails in PHP
 ```php
 $imapDriver = new ImapDriver('imap.google.com', 993);
 $imapDriver->login('login', 'password');
+
 //list all active folders from mailbox
 $folders = $imapDriver->getAllFolders();
 ```
