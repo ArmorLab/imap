@@ -20,6 +20,8 @@ script:
     - vendor/bin/phpunit --coverage-clover clover.xml
     - vendor/bin/phpstan analyse src --level max
     - vendor/bin/php-cs-fixer fix . --rules=@PSR2 --no-interaction --dry-run --diff-format=udiff
+    - vendor/bin/phpcs --standard=PSR2 ./src
+    - vendor/bin/phpunit --testdox tests
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
