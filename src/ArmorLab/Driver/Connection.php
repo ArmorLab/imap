@@ -19,7 +19,7 @@ class Connection
         string $host,
         int $port,
         int $timeout = 15
-    ){
+    ) {
         $filePointer = fsockopen('ssl://'.$host, $port, $errno, $errstr, $timeout);
         if ($filePointer === false) {
             throw new ConnectionException("Could not connect to host ($errno) $errstr");
@@ -46,7 +46,7 @@ class Connection
         while ($line = fgets($this->filePointer)) {
             $line = trim($line);
 
-            if(\strpos($line, $this->commandCounter) !== false) {
+            if (\strpos($line, $this->commandCounter) !== false) {
                 $lastEndline = $line;
                 break;
             }
