@@ -13,7 +13,7 @@ class ListResponseParser
      * 
      * @return string[]
      */
-    public static function parseResponse(array $responseRows): array
+    public function parseResponse(array $responseRows): array
     {
         $folders = [];
 
