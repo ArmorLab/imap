@@ -8,7 +8,7 @@ use ArmorLab\Driver\SocketImapDriver;
 
 try {
     $imapDriver = new SocketImapDriver(
-        \constant('IMAP_HOST'), 
+        \constant('IMAP_HOST'),
         \constant('IMAP_PORT'),
         \constant('IMAP_TIMEOUT')
     );
