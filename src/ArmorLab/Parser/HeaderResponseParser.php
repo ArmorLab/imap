@@ -11,7 +11,7 @@ class HeaderResponseParser
     /**
      * @param string[] $responseRows
      */
-    public static function parseResponse(string $uid, array $responseRows): MessageHeader
+    public function parseResponse(string $uid, array $responseRows): MessageHeader
     {
         $date = $deliveryDate = $envelopeTo = $from = $to = $cc = $importance = '';
 

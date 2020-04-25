@@ -8,4 +8,10 @@ before_script:
     - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
+    - pecl install pcov
+    - vendor/bin/phpunit --coverage-clover coverage.xml
     - vendor/bin/phpstan analyse src --level max
+    - vendor/bin/php-cs-fixer fix . --rules=@PSR2 --no-interaction --dry-run --diff-format=udiff
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)

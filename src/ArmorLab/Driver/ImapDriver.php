@@ -8,9 +8,11 @@ use ArmorLab\Message\MessageHeader;
 use ArmorLab\Parser\HeaderResponseParser;
 use ArmorLab\Parser\ListResponseParser;
 
-class SocketImapDriver
+class ImapDriver
 {
     private Connection $connection;
+    private ListResponseParser $listResponseParser;
+    private HeaderResponseParser $headerResponseParser;
 
     public function __construct(
         string $host,
@@ -18,6 +20,8 @@ class SocketImapDriver
         int $timeout = 15
     ){
         $this->connection = new Connection($host, $port, $timeout);
+        $this->listResponseParser = new ListResponseParser();
+        $this->headerResponseParser = new HeaderResponseParser();
     }
 
     public function login(string $login, string $pwd): void
@@ -34,7 +38,7 @@ class SocketImapDriver
     {
         $response = $this->connection->command('LSUB "" "*"');
 
-        return ListResponseParser::parseResponse($response);
+        return $this->listResponseParser->parseResponse($response);
     }
 
     /**
@@ -44,7 +48,7 @@ class SocketImapDriver
     {
         $response = $this->connection->command('LIST "" "*"');
         
-        return ListResponseParser::parseResponse($response);
+        return $this->listResponseParser->parseResponse($response);
     }
 
     public function selectFolder(string $folder): void
@@ -86,6 +90,6 @@ class SocketImapDriver
     {
         $response = $this->connection->command("FETCH $uid BODY.PEEK[HEADER]");
         
-        return HeaderResponseParser::parseResponse($uid, $response);
+        return $this->headerResponseParser->parseResponse($uid, $response);
     }
 }
