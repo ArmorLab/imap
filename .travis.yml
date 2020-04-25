@@ -1,3 +1,8 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2b57e5ada790c0f231dfa75acec4d559a551ae6b3c6c7d6e56458478b6f8618d
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
 language: php
 
 php:
@@ -6,12 +11,16 @@ php:
 before_script:
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction --prefer-source --dev
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter 
+    - chmod +x ./cc-test-reporter 
+    - ./cc-test-reporter before-build
 
 script:
     - pecl install pcov
-    - vendor/bin/phpunit --coverage-clover coverage.xml
+    - vendor/bin/phpunit --coverage-clover clover.xml
     - vendor/bin/phpstan analyse src --level max
     - vendor/bin/php-cs-fixer fix . --rules=@PSR2 --no-interaction --dry-run --diff-format=udiff
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
+    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi

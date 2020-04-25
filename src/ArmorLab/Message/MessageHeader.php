@@ -7,7 +7,7 @@ namespace ArmorLab\Message;
 class MessageHeader
 {
     private string $uid;
-    private string $date = '';   
+    private string $date = '';
     private string $deliveryDate = '';
     private string $envelopeTo = '';
     private string $from = '';

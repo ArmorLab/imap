@@ -18,7 +18,7 @@ class ImapDriver
         string $host,
         int $port,
         int $timeout = 15
-    ){
+    ) {
         $this->connection = new Connection($host, $port, $timeout);
         $this->listResponseParser = new ListResponseParser();
         $this->headerResponseParser = new HeaderResponseParser();
@@ -63,7 +63,7 @@ class ImapDriver
     {
         $ids = $this->getUidsBySearchCriteria($criteria);
         $messages = [];
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $messages[] = $this->getHeadersFromUid($id);
         }
 
