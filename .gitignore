@@ -2,3 +2,5 @@ vsc-workspace.code-workspace
 vendor
 config/config.php
 composer.lock
+coverage.xml
+.php_cs.cache
