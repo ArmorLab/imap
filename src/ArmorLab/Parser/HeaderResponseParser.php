@@ -14,26 +14,8 @@ class HeaderResponseParser
      */
     public function parseResponse(string $uid, array $responseRows): MessageHeader
     {
-        $searchData = [
-            'date' => 'Date: ',
-            'deliveryDate' => 'Delivery-date: ',
-            'envelopeTo' => 'Envelope-to: ',
-            'from' => 'From: ',
-            'to' => 'To: ',
-            'cc' => 'Cc: ',
-            'importance' => 'Importance: ',
-        ];
-
-        $messageHeaderData = [
-            'uid' => $uid,
-            'date' => '',
-            'deliveryDate' => '',
-            'envelopeTo' => '',
-            'from' => '',
-            'to' => '',
-            'cc' => '',
-            'importance' => '',
-        ];
+        $searchData = $this->getSearchData();
+        $messageHeaderData = $this->prepareMessageHeaderData($uid);
 
         foreach ($responseRows as $item) {
             foreach ($searchData as $key => $data) {
@@ -46,5 +28,49 @@ class HeaderResponseParser
         $factory = new MessageHeaderFactory;
 
         return $factory->createFromArray($messageHeaderData);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getSearchData(): array
+    {
+        return [
+            'date' => 'Date: ',
+            'deliveryDate' => 'Delivery-date: ',
+            'envelopeTo' => 'Envelope-to: ',
+            'from' => 'From: ',
+            'to' => 'To: ',
+            'cc' => 'Cc: ',
+            'importance' => 'Importance: ',
+        ];
+    }
+
+    /**
+     * @param string $uid
+     * @return string[]
+     *  [
+     *      'uid' => (string) required,
+     *      'date' => string,
+     *      'deliveryDate' => (string),
+     *      'envelopeTo' => (string),
+     *      'from' => (string),
+     *      'to' => (string),
+     *      'cc' => (string),
+     *      'importance' => (string),
+     *  ]
+     */
+    private function prepareMessageHeaderData(string $uid): array
+    {
+        return [
+            'uid' => $uid,
+            'date' => '',
+            'deliveryDate' => '',
+            'envelopeTo' => '',
+            'from' => '',
+            'to' => '',
+            'cc' => '',
+            'importance' => '',
+        ];
     }
 }
