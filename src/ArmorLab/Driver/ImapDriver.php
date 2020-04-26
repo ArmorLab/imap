@@ -14,7 +14,8 @@ class ImapDriver
     private ListResponseParser $listResponseParser;
     private HeaderResponseParser $headerResponseParser;
 
-    public function __construct(Connection $connection) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
         $this->listResponseParser = new ListResponseParser();
         $this->headerResponseParser = new HeaderResponseParser();
