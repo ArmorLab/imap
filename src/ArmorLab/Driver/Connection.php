@@ -7,6 +7,9 @@ namespace ArmorLab\Driver;
 use ArmorLab\Exception\CommandException;
 use ArmorLab\Exception\ConnectionException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Connection
 {
     /**
