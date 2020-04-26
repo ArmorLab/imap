@@ -51,6 +51,7 @@ class HeaderResponseParser
         foreach ($rows as $row) {
             if (\strpos($row, $searchData) !== false) {
                 $parsedRow = \str_replace($searchData, '', $row);
+                break;
             }
         }
 

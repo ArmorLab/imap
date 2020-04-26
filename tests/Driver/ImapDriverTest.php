@@ -19,4 +19,43 @@ final class ImapDriverTest extends TestCase
 
         $this->assertNull($driver->login('email', 'password'));
     }
+
+    public function testGetAllFoldersFromMailbox(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $driver = new ImapDriver($connection);
+        $connection
+            ->expects($this->once())
+            ->method('command')
+            ->with('LIST "" "*"')
+            ->willReturn([]);
+
+        $this->assertEquals([], $driver->getAllFolders());
+    }
+
+    public function testGetActiveFoldersFromMailbox(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $driver = new ImapDriver($connection);
+        $connection
+            ->expects($this->once())
+            ->method('command')
+            ->with('LSUB "" "*"')
+            ->willReturn([]);
+
+        $this->assertEquals([], $driver->getActiveFolders());
+    }
+
+    public function testSelectFolderFromMailbox(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $driver = new ImapDriver($connection);
+        $connection
+            ->expects($this->once())
+            ->method('command')
+            ->with('SELECT INBOX')
+            ->willReturn([]);
+
+        $this->assertNull($driver->selectFolder('INBOX'));
+    }
 }
