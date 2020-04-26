@@ -1,6 +1,8 @@
-vsc-workspace.code-workspace
+config
+docker
+public
 vendor
-config/config.php
 composer.lock
 coverage.xml
 .php_cs.cache
+vsc-workspace.code-workspace
