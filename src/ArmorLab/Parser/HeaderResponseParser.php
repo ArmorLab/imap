@@ -14,18 +14,13 @@ class HeaderResponseParser
      */
     public function parseResponse(string $uid, array $responseRows): MessageHeader
     {
-        $searchData = $this->getSearchData();
-        $messageHeaderData = $this->prepareMessageHeaderData($uid);
-
-        foreach ($responseRows as $item) {
-            foreach ($searchData as $key => $data) {
-                if (\strpos($item, $data) !== false) {
-                    $messageHeaderData[$key] = \str_replace($data, '', $item);
-                }
-            }
-        }
-
         $factory = new MessageHeaderFactory;
+        $searchDataList = $this->getSearchData();
+        $messageHeaderData = ['uid' => $uid];
+
+        foreach ($searchDataList as $key => $searchData) {
+            $messageHeaderData[$key] = $this->parseRow($responseRows, $searchData);
+        }
 
         return $factory->createFromArray($messageHeaderData);
     }
@@ -47,30 +42,18 @@ class HeaderResponseParser
     }
 
     /**
-     * @param string $uid
-     * @return string[]
-     *  [
-     *      'uid' => (string) required,
-     *      'date' => string,
-     *      'deliveryDate' => (string),
-     *      'envelopeTo' => (string),
-     *      'from' => (string),
-     *      'to' => (string),
-     *      'cc' => (string),
-     *      'importance' => (string),
-     *  ]
+     * @param string[] $rows
      */
-    private function prepareMessageHeaderData(string $uid): array
+    private function parseRow(array $rows, string $searchData): string
     {
-        return [
-            'uid' => $uid,
-            'date' => '',
-            'deliveryDate' => '',
-            'envelopeTo' => '',
-            'from' => '',
-            'to' => '',
-            'cc' => '',
-            'importance' => '',
-        ];
+        $parsedRow = '';
+            
+        foreach ($rows as $row) {
+            if (\strpos($row, $searchData) !== false) {
+                $parsedRow = \str_replace($searchData, '', $row);
+            }
+        }
+
+        return $parsedRow;
     }
 }
