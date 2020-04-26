@@ -17,6 +17,11 @@ class ListResponseParser
     {
         $folders = [];
 
+        /**
+         * Example rows:
+         * * LSUB () "." Spam
+         * * LSUB () "." Spam
+         */
         foreach ($responseRows as $item) {
             $rows = (array) preg_split('/ ("\/"|".") /', $item);
             
@@ -24,9 +29,9 @@ class ListResponseParser
                 throw new CommandException('Unhandled response!');
             }
 
-            $folders[] = \trim((string) $rows[1], '"');
+            $folders[] = \trim(\trim((string) $rows[1], '"'));
         }
-
+        
         return $folders;
     }
 }
