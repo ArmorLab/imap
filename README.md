@@ -15,7 +15,9 @@ Library for manage mailboxes and emails in PHP
 ## Usage
 
 ```php
-$imapDriver = new ImapDriver('imap.google.com', 993);
+$connection = new \ArmorLab\Driver\Connection('imap.google.com', 993);
+
+$imapDriver = new \ArmorLab\Driver\ImapDriver($connection);
 $imapDriver->login('login', 'password');
 
 //list all active folders from mailbox

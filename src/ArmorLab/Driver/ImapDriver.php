@@ -14,12 +14,8 @@ class ImapDriver
     private ListResponseParser $listResponseParser;
     private HeaderResponseParser $headerResponseParser;
 
-    public function __construct(
-        string $host,
-        int $port,
-        int $timeout = 15
-    ) {
-        $this->connection = new Connection($host, $port, $timeout);
+    public function __construct(Connection $connection) {
+        $this->connection = $connection;
         $this->listResponseParser = new ListResponseParser();
         $this->headerResponseParser = new HeaderResponseParser();
     }
