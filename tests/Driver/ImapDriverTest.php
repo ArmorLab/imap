@@ -58,4 +58,17 @@ final class ImapDriverTest extends TestCase
 
         $this->assertNull($driver->selectFolder('INBOX'));
     }
+
+    public function testSearchForEmptyResults(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $driver = new ImapDriver($connection);
+        $connection
+            ->expects($this->once())
+            ->method('command')
+            ->with('SEARCH ALL')
+            ->willReturn([]);
+
+        $this->assertEquals([], $driver->search('ALL'));
+    }
 }
