@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 include __DIR__ . '/../config/bootstrap.php';
 
-use ArmorLab\Driver\SocketImapDriver;
+use ArmorLab\Driver\ImapDriver;
 
 try {
-    $imapDriver = new SocketImapDriver(
+    $imapDriver = new ImapDriver(
         \constant('IMAP_HOST'),
         \constant('IMAP_PORT'),
         \constant('IMAP_TIMEOUT')

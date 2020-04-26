@@ -18,6 +18,7 @@ class ListResponseParser
         $folders = [];
 
         foreach ($responseRows as $item) {
+            var_dump($item);
             $rows = (array) preg_split('/ ("\/"|".") /', $item);
             
             if (\count($rows) < 2) {
