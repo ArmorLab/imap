@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArmorLab\Driver;
 
+use ArmorLab\Message\MessageHeader;
 use PHPUnit\Framework\TestCase;
 
 final class ImapDriverTest extends TestCase
@@ -70,5 +71,32 @@ final class ImapDriverTest extends TestCase
             ->willReturn([]);
 
         $this->assertEquals([], $driver->search('ALL'));
+    }
+
+    public function testSearchForSingleResultWithEmptyHeader(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $driver = new ImapDriver($connection);
+        $valueMap = [
+            ['SEARCH ALL', ['* SEARCH 1']],
+            ['FETCH 1 BODY.PEEK[HEADER]', []],
+        ];
+        $connection
+            ->expects($this->any())
+            ->method('command')
+            ->will($this->returnValueMap($valueMap));
+            
+        $result = $driver->search('ALL');   
+        $messageHeader = $result[0]; 
+
+        $this->assertInstanceOf(MessageHeader::class, $messageHeader);
+        $this->assertEquals('1', $messageHeader->getUid());
+        $this->assertEquals('', $messageHeader->getDate());
+        $this->assertEquals('', $messageHeader->getDeliveryDate());
+        $this->assertEquals('', $messageHeader->getEnvelopeTo());
+        $this->assertEquals('', $messageHeader->getFrom());
+        $this->assertEquals('', $messageHeader->getImportance());
+        $this->assertEquals('', $messageHeader->getTo());
+        $this->assertEquals('', $messageHeader->getCc());
     }
 }
