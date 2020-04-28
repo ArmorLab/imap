@@ -86,8 +86,8 @@ final class ImapDriverTest extends TestCase
             ->method('command')
             ->will($this->returnValueMap($valueMap));
             
-        $result = $driver->search('ALL');   
-        $messageHeader = $result[0]; 
+        $result = $driver->search('ALL');
+        $messageHeader = $result[0];
 
         $this->assertInstanceOf(MessageHeader::class, $messageHeader);
         $this->assertEquals('1', $messageHeader->getUid());
