@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArmorLab\Driver;
 
+use ArmorLab\Command\FetchCommand;
 use ArmorLab\Message\MessageHeader;
 use ArmorLab\Parser\HeaderResponseParser;
 use ArmorLab\Parser\ListResponseParser;
@@ -11,14 +12,14 @@ use ArmorLab\Parser\ListResponseParser;
 class ImapDriver
 {
     private Connection $connection;
+    private FetchCommand $fetchCommand;
     private ListResponseParser $listResponseParser;
-    private HeaderResponseParser $headerResponseParser;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+        $this->fetchCommand = new FetchCommand($connection);
         $this->listResponseParser = new ListResponseParser();
-        $this->headerResponseParser = new HeaderResponseParser();
     }
 
     public function login(string $login, string $pwd): void
@@ -61,7 +62,7 @@ class ImapDriver
         $ids = $this->getUidsBySearchCriteria($criteria);
         $messages = [];
         foreach ($ids as $id) {
-            $messages[] = $this->getHeadersFromUid($id);
+            $messages[] = $this->fetchCommand->fetchHeader($id);
         }
 
         return $messages;
@@ -81,12 +82,5 @@ class ImapDriver
         }
 
         return [];
-    }
-
-    private function getHeadersFromUid(string $uid): MessageHeader
-    {
-        $response = $this->connection->command("FETCH $uid BODY.PEEK[HEADER]");
-        
-        return $this->headerResponseParser->parseResponse($uid, $response);
     }
 }
