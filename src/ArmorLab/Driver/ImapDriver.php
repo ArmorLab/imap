@@ -7,7 +7,6 @@ namespace ArmorLab\Driver;
 use ArmorLab\Command\FetchCommand;
 use ArmorLab\Command\SearchCommand;
 use ArmorLab\Message\MessageHeader;
-use ArmorLab\Parser\HeaderResponseParser;
 use ArmorLab\Parser\ListResponseParser;
 
 class ImapDriver
