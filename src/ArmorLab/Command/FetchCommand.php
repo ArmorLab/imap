@@ -11,7 +11,6 @@ use ArmorLab\Parser\HeaderResponseParser;
 class FetchCommand
 {
     private Connection $connection;
-
     private HeaderResponseParser $headerResponseParser;
 
     public function __construct(Connection $connection)

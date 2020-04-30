@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArmorLab\Driver;
 
 use ArmorLab\Command\FetchCommand;
+use ArmorLab\Command\SearchCommand;
 use ArmorLab\Message\MessageHeader;
 use ArmorLab\Parser\HeaderResponseParser;
 use ArmorLab\Parser\ListResponseParser;
@@ -13,12 +14,14 @@ class ImapDriver
 {
     private Connection $connection;
     private FetchCommand $fetchCommand;
+    private SearchCommand $searchCommand;
     private ListResponseParser $listResponseParser;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
         $this->fetchCommand = new FetchCommand($connection);
+        $this->searchCommand = new SearchCommand($connection);
         $this->listResponseParser = new ListResponseParser();
     }
 
@@ -59,28 +62,12 @@ class ImapDriver
      */
     public function search(string $criteria): array
     {
-        $ids = $this->getUidsBySearchCriteria($criteria);
+        $ids = $this->searchCommand->search($criteria);
         $messages = [];
         foreach ($ids as $id) {
             $messages[] = $this->fetchCommand->fetchHeader($id);
         }
 
         return $messages;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getUidsBySearchCriteria(string $criteria): array
-    {
-        $response = $this->connection->command("SEARCH $criteria");
-
-        if (\is_array($response) && \count($response) === 1) {
-            $response = \str_replace('* SEARCH ', '', $response[0]);
-
-            return explode(' ', $response);
-        }
-
-        return [];
     }
 }
