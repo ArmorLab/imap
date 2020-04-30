@@ -18,6 +18,9 @@ class SearchCommand
         $this->searchResponseParser = new SearchResponseParser;
     }
 
+    /**
+     * @return string[]
+     */
     public function search(string $criteria): array
     {
         $response = $this->connection->command("SEARCH $criteria");

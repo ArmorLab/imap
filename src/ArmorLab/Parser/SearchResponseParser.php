@@ -7,6 +7,7 @@ namespace ArmorLab\Parser;
 class SearchResponseParser
 {
     /**
+     * @param string|string[] $response
      * @return string[]
      */
     public function parseResponse($response): array
