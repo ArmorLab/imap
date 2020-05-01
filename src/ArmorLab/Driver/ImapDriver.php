@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace ArmorLab\Driver;
 
 use ArmorLab\Command\FetchCommand;
+use ArmorLab\Command\ListCommand;
 use ArmorLab\Command\SearchCommand;
 use ArmorLab\Message\MessageHeader;
-use ArmorLab\Parser\ListResponseParser;
 
 class ImapDriver
 {
     private Connection $connection;
     private FetchCommand $fetchCommand;
     private SearchCommand $searchCommand;
-    private ListResponseParser $listResponseParser;
+    private ListCommand $listCommand;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
         $this->fetchCommand = new FetchCommand($connection);
         $this->searchCommand = new SearchCommand($connection);
-        $this->listResponseParser = new ListResponseParser();
+        $this->listCommand = new ListCommand($connection);
     }
 
     public function login(string $login, string $pwd): void
@@ -32,13 +32,13 @@ class ImapDriver
     }
 
     /**
+     * Returns a subset of names from the set of names
+     * that the user has declared as being "active" or "subscribed".
      * @return string[]
      */
-    public function getActiveFolders(): array
+    public function getSubscribedFolders(): array
     {
-        $response = $this->connection->command('LSUB "" "*"');
-
-        return $this->listResponseParser->parseResponse($response);
+        return $this->listCommand->listSubscribed();
     }
 
     /**
@@ -46,9 +46,7 @@ class ImapDriver
      */
     public function getAllFolders(): array
     {
-        $response = $this->connection->command('LIST "" "*"');
-        
-        return $this->listResponseParser->parseResponse($response);
+        return $this->listCommand->listAll();
     }
 
     public function selectFolder(string $folder): void

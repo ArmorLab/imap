@@ -34,7 +34,7 @@ final class ImapDriverTest extends TestCase
         $this->assertEquals([], $driver->getAllFolders());
     }
 
-    public function testGetActiveFoldersFromMailbox(): void
+    public function testGetSubscribedFoldersFromMailbox(): void
     {
         $connection = $this->createMock(Connection::class);
         $driver = new ImapDriver($connection);
@@ -44,7 +44,7 @@ final class ImapDriverTest extends TestCase
             ->with('LSUB "" "*"')
             ->willReturn([]);
 
-        $this->assertEquals([], $driver->getActiveFolders());
+        $this->assertEquals([], $driver->getSubscribedFolders());
     }
 
     public function testSelectFolderFromMailbox(): void
