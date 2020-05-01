@@ -32,8 +32,6 @@ class ImapDriver
     }
 
     /**
-     * Returns a subset of names from the set of names
-     * that the user has declared as being "active" or "subscribed".
      * @return string[]
      */
     public function getSubscribedFolders(): array
