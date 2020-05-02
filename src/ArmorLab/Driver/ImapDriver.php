@@ -6,12 +6,14 @@ namespace ArmorLab\Driver;
 
 use ArmorLab\Command\FetchCommand;
 use ArmorLab\Command\ListCommand;
+use ArmorLab\Command\LoginCommand;
 use ArmorLab\Command\SearchCommand;
 use ArmorLab\Message\MessageHeader;
 
 class ImapDriver
 {
     private Connection $connection;
+    private LoginCommand $loginCommand;
     private FetchCommand $fetchCommand;
     private SearchCommand $searchCommand;
     private ListCommand $listCommand;
@@ -19,16 +21,15 @@ class ImapDriver
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+        $this->loginCommand = new LoginCommand($connection);
         $this->fetchCommand = new FetchCommand($connection);
         $this->searchCommand = new SearchCommand($connection);
         $this->listCommand = new ListCommand($connection);
     }
 
-    public function login(string $login, string $pwd): void
+    public function login(string $username, string $password): void
     {
-        $this->connection->command(
-            \sprintf('LOGIN %s "%s"', $login, $pwd)
-        );
+        $this->loginCommand->login($username, $password);
     }
 
     /**
