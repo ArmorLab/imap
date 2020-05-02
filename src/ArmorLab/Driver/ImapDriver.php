@@ -8,20 +8,21 @@ use ArmorLab\Command\FetchCommand;
 use ArmorLab\Command\ListCommand;
 use ArmorLab\Command\LoginCommand;
 use ArmorLab\Command\SearchCommand;
+use ArmorLab\Command\SelectCommand;
 use ArmorLab\Message\MessageHeader;
 
 class ImapDriver
 {
-    private Connection $connection;
     private LoginCommand $loginCommand;
+    private SelectCommand $selectCommand;
     private FetchCommand $fetchCommand;
     private SearchCommand $searchCommand;
     private ListCommand $listCommand;
 
     public function __construct(Connection $connection)
     {
-        $this->connection = $connection;
         $this->loginCommand = new LoginCommand($connection);
+        $this->selectCommand = new SelectCommand($connection);
         $this->fetchCommand = new FetchCommand($connection);
         $this->searchCommand = new SearchCommand($connection);
         $this->listCommand = new ListCommand($connection);
@@ -30,6 +31,11 @@ class ImapDriver
     public function login(string $username, string $password): void
     {
         $this->loginCommand->login($username, $password);
+    }
+
+    public function selectFolder(string $folder): void
+    {
+        $this->selectCommand->select($folder);
     }
 
     /**
@@ -46,11 +52,6 @@ class ImapDriver
     public function getAllFolders(): array
     {
         return $this->listCommand->listAll();
-    }
-
-    public function selectFolder(string $folder): void
-    {
-        $this->connection->command("SELECT $folder");
     }
 
     /**
