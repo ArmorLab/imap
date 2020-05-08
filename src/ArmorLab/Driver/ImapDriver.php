@@ -9,6 +9,7 @@ use ArmorLab\Command\ListCommand;
 use ArmorLab\Command\LoginCommand;
 use ArmorLab\Command\SearchCommand;
 use ArmorLab\Command\SelectCommand;
+use ArmorLab\Message\Message;
 use ArmorLab\Message\MessageHeader;
 
 class ImapDriver
@@ -66,5 +67,10 @@ class ImapDriver
         }
 
         return $messages;
+    }
+
+    public function getMessage(string $uid): Message
+    {
+        return $this->fetchCommand->fetchMessage($uid);
     }
 }
