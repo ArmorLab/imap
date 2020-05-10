@@ -8,11 +8,13 @@ class ContentParserContext
 {
     private ContentParserInterface $htmlParser;
     private ContentParserInterface $xhtmlParser;
+    private ContentParserInterface $textParser;
 
     public function __construct()
     {
         $this->htmlParser = new HtmlParser;
         $this->xhtmlParser = new XhtmlParser;
+        $this->textParser = new TextParser;
     }
 
     /**
@@ -25,6 +27,10 @@ class ContentParserContext
             return $this->htmlParser->parseContent($response);
         }
 
-        return $this->xhtmlParser->parseContent($response);
+        if (\strpos($stringResponse, 'xhtml')) {
+            return $this->xhtmlParser->parseContent($response);
+        }
+
+        return $this->textParser->parseContent($response);
     }
 }

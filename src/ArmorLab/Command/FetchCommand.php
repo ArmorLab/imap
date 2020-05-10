@@ -32,7 +32,7 @@ class FetchCommand
 
     public function fetchMessage(string $uid): Message
     {
-        $response = $this->connection->command("FETCH $uid BODY[TEXT]");
+        $response = $this->connection->command("FETCH $uid BODY[1]");
 
         return new Message(
             $this->headerResponseParser->parseResponse($uid, $response),
